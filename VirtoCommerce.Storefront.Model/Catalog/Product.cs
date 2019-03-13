@@ -289,6 +289,11 @@ namespace VirtoCommerce.Storefront.Model.Catalog
         public PaymentPlan PaymentPlan { get; set; }
 
         /// <summary>
+        /// Product rating built based on Customer Reviews
+        /// </summary>
+        public double? ProductRating { get; set; }
+
+        /// <summary>
         /// Apply prices to product
         /// </summary>
         /// <param name="prices"></param>

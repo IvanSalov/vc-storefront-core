@@ -5,7 +5,7 @@ namespace VirtoCommerce.Storefront.Domain.CustomerReview
 {
     public static partial class CustomerReviewConverter
     {
-        public static Model.CustomerReviews.CustomerReview ToCustomerReview(this reviewDto.CustomerReview itemDto)
+        public static Model.CustomerReviews.CustomerReview ToCustomerReview(this reviewDto.CustomerReviewBrief itemDto)
         {
             var result = new Model.CustomerReviews.CustomerReview
             {
@@ -17,7 +17,10 @@ namespace VirtoCommerce.Storefront.Domain.CustomerReview
                 IsActive = itemDto.IsActive,
                 ModifiedBy = itemDto.ModifiedBy,
                 ModifiedDate = itemDto.ModifiedDate,
-                ProductId = itemDto.ProductId
+                ProductId = itemDto.ProductId,
+                Value = itemDto.Value,
+                LikesNumber = itemDto.LikesNumber,
+                DislikesNumber = itemDto.DislikesNumber
             };
 
             return result;
@@ -36,6 +39,33 @@ namespace VirtoCommerce.Storefront.Domain.CustomerReview
             };
 
             return result;
+        }
+
+        public static reviewDto.CustomerReviewRequest ToCustomerReviewRequest(this CustomerReviewCreateModel createModel)
+        {
+            return new reviewDto.CustomerReviewRequest
+            {
+                Id = createModel.Id,
+                AuthorNickname = createModel.AuthorNickname,
+                Content = createModel.Content,
+                Value = createModel.Value
+            };
+        }
+
+        public static reviewDto.CustomerReviewRequest ToCustomerReviewRequest(this CustomerReviewUpdateModel updateModel)
+        {
+            return new reviewDto.CustomerReviewRequest
+            {
+                Content = updateModel.Content
+            };
+        }
+
+        public static reviewDto.CustomerReviewAssessmentRequest ToCustomerReviewAssessmentRequest(this CustomerReviewAssessmentCreateModel customerReviewAssessmentCreateModel)
+        {
+            return new reviewDto.CustomerReviewAssessmentRequest
+            {
+                IsLike = customerReviewAssessmentCreateModel.IsLike
+            };
         }
     }
 }

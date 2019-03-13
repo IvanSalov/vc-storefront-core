@@ -21,7 +21,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Converters
                 Content = item.Content,
                 CreatedDate = item.CreatedDate,
                 IsActive = item.IsActive,
-                ProductId = item.ProductId
+                ProductId = item.ProductId,
+                Value = item.Value,
+                LikesNumber = item.LikesNumber,
+                DislikesNumber = item.DislikesNumber
             };
         }
     }

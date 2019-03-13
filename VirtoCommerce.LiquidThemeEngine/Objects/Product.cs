@@ -318,5 +318,10 @@ namespace VirtoCommerce.LiquidThemeEngine.Objects
         /// </summary>
         public int? AssociationQuantity { get; set; }
 
+        /// <summary>
+        /// Product rating based on Customer Reviews
+        /// </summary>
+        public double? ProductRating { get; set; }
+
     }
 }
