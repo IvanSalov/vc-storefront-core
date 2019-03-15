@@ -1,3 +1,4 @@
+using System.Linq;
 using VirtoCommerce.Storefront.Model.CustomerReviews;
 using reviewDto=VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi.Models;
 
@@ -5,7 +6,7 @@ namespace VirtoCommerce.Storefront.Domain.CustomerReview
 {
     public static partial class CustomerReviewConverter
     {
-        public static Model.CustomerReviews.CustomerReview ToCustomerReview(this reviewDto.CustomerReviewBrief itemDto, Model.Security.User user)
+        public static Model.CustomerReviews.CustomerReview ToCustomerReview(this reviewDto.CustomerReviewDetailed itemDto, Model.Security.User user)
         {
             var result = new Model.CustomerReviews.CustomerReview
             {
@@ -21,7 +22,9 @@ namespace VirtoCommerce.Storefront.Domain.CustomerReview
                 Value = itemDto.Value,
                 LikesNumber = itemDto.LikesNumber,
                 DislikesNumber = itemDto.DislikesNumber,
-                IsCurrentUserReview = user.UserName == itemDto.CreatedBy
+                IsCurrentUserReview = user.UserName == itemDto.CreatedBy,
+                IsLikedByCurrentUser = itemDto.CustomerReviewAssessments.Any(a => (a.CreatedBy == user.UserName) && a.IsLike.Value),
+                IsDislikedByCurrentUser = itemDto.CustomerReviewAssessments.Any(a => (a.CreatedBy == user.UserName) && !a.IsLike.Value),
             };
 
             return result;

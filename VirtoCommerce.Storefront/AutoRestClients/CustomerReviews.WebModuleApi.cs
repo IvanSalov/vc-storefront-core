@@ -411,7 +411,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<GenericSearchResultCustomerReviewBrief>> SearchCustomerReviewsWithHttpMessagesAsync(CustomerReviewSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<GenericSearchResultCustomerReviewDetailed>> SearchCustomerReviewsWithHttpMessagesAsync(CustomerReviewSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (criteria == null)
             {
@@ -502,7 +502,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<GenericSearchResultCustomerReviewBrief>();
+            var _result = new HttpOperationResponse<GenericSearchResultCustomerReviewDetailed>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -511,7 +511,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<GenericSearchResultCustomerReviewBrief>(_responseContent, Client.DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<GenericSearchResultCustomerReviewDetailed>(_responseContent, Client.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -1218,7 +1218,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi
         /// <exception cref="Microsoft.Rest.ValidationException">
         /// Thrown when a required parameter is null
         /// </exception>
-        Task<HttpOperationResponse<GenericSearchResultCustomerReviewBrief>> SearchCustomerReviewsWithHttpMessagesAsync(CustomerReviewSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<GenericSearchResultCustomerReviewDetailed>> SearchCustomerReviewsWithHttpMessagesAsync(CustomerReviewSearchCriteria criteria, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
         /// <param name='customerReviews'>
         /// </param>
         /// <param name='customHeaders'>
@@ -1332,7 +1332,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi
             /// </param>
             /// <param name='criteria'>
             /// </param>
-            public static GenericSearchResultCustomerReviewBrief SearchCustomerReviews(this ICustomerReviews operations, CustomerReviewSearchCriteria criteria)
+            public static GenericSearchResultCustomerReviewDetailed SearchCustomerReviews(this ICustomerReviews operations, CustomerReviewSearchCriteria criteria)
             {
                 return operations.SearchCustomerReviewsAsync(criteria).GetAwaiter().GetResult();
             }
@@ -1345,7 +1345,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<GenericSearchResultCustomerReviewBrief> SearchCustomerReviewsAsync(this ICustomerReviews operations, CustomerReviewSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<GenericSearchResultCustomerReviewDetailed> SearchCustomerReviewsAsync(this ICustomerReviews operations, CustomerReviewSearchCriteria criteria, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.SearchCustomerReviewsWithHttpMessagesAsync(criteria, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1961,20 +1961,96 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi.
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class CustomerReviewBrief
+    public partial class CustomerReviewAssessmentResponse
     {
         /// <summary>
-        /// Initializes a new instance of the CustomerReviewBrief class.
+        /// Initializes a new instance of the CustomerReviewAssessmentResponse
+        /// class.
         /// </summary>
-        public CustomerReviewBrief()
+        public CustomerReviewAssessmentResponse()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CustomerReviewBrief class.
+        /// Initializes a new instance of the CustomerReviewAssessmentResponse
+        /// class.
         /// </summary>
-        public CustomerReviewBrief(string authorNickname = default(string), string content = default(string), bool? isActive = default(bool?), string productId = default(string), int? value = default(int?), int? likesNumber = default(int?), int? dislikesNumber = default(int?), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
+        public CustomerReviewAssessmentResponse(string id = default(string), string authorNickname = default(string), bool? isLike = default(bool?), System.DateTime? createdDate = default(System.DateTime?), string createdBy = default(string))
+        {
+            Id = id;
+            AuthorNickname = authorNickname;
+            IsLike = isLike;
+            CreatedDate = createdDate;
+            CreatedBy = createdBy;
+            CustomInit();
+        }
+
+        /// <summary>
+        /// An initialization method that performs custom operations like setting defaults
+        /// </summary>
+        partial void CustomInit();
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "authorNickname")]
+        public string AuthorNickname { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "isLike")]
+        public bool? IsLike { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdDate")]
+        public System.DateTime? CreatedDate { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "createdBy")]
+        public string CreatedBy { get; set; }
+
+    }
+}
+// <auto-generated>
+// Code generated by Microsoft (R) AutoRest Code Generator.
+// Changes may cause incorrect behavior and will be lost if the code is
+// regenerated.
+// </auto-generated>
+
+namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi.Models
+{
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
+    using Newtonsoft.Json;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    public partial class CustomerReviewDetailed
+    {
+        /// <summary>
+        /// Initializes a new instance of the CustomerReviewDetailed class.
+        /// </summary>
+        public CustomerReviewDetailed()
+        {
+            CustomInit();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the CustomerReviewDetailed class.
+        /// </summary>
+        public CustomerReviewDetailed(string authorNickname = default(string), string content = default(string), bool? isActive = default(bool?), string productId = default(string), int? value = default(int?), int? likesNumber = default(int?), int? dislikesNumber = default(int?), IList<CustomerReviewAssessmentResponse> customerReviewAssessments = default(IList<CustomerReviewAssessmentResponse>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
         {
             AuthorNickname = authorNickname;
             Content = content;
@@ -1983,6 +2059,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi.
             Value = value;
             LikesNumber = likesNumber;
             DislikesNumber = dislikesNumber;
+            CustomerReviewAssessments = customerReviewAssessments;
             CreatedDate = createdDate;
             ModifiedDate = modifiedDate;
             CreatedBy = createdBy;
@@ -2030,6 +2107,11 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi.
         /// </summary>
         [JsonProperty(PropertyName = "dislikesNumber")]
         public int? DislikesNumber { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "customerReviewAssessments")]
+        public IList<CustomerReviewAssessmentResponse> CustomerReviewAssessments { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2134,198 +2216,6 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi.
         /// </summary>
         [JsonProperty(PropertyName = "value")]
         public int? Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedDate")]
-        public System.DateTime? ModifiedDate { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdBy")]
-        public string CreatedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "modifiedBy")]
-        public string ModifiedBy { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class CustomerReviewAssessmentResponse
-    {
-        /// <summary>
-        /// Initializes a new instance of the CustomerReviewAssessmentResponse
-        /// class.
-        /// </summary>
-        public CustomerReviewAssessmentResponse()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CustomerReviewAssessmentResponse
-        /// class.
-        /// </summary>
-        public CustomerReviewAssessmentResponse(string id = default(string), string authorNickname = default(string), bool? isLike = default(bool?), System.DateTime? createdDate = default(System.DateTime?))
-        {
-            Id = id;
-            AuthorNickname = authorNickname;
-            IsLike = isLike;
-            CreatedDate = createdDate;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "id")]
-        public string Id { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "authorNickname")]
-        public string AuthorNickname { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isLike")]
-        public bool? IsLike { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "createdDate")]
-        public System.DateTime? CreatedDate { get; set; }
-
-    }
-}
-// <auto-generated>
-// Code generated by Microsoft (R) AutoRest Code Generator.
-// Changes may cause incorrect behavior and will be lost if the code is
-// regenerated.
-// </auto-generated>
-
-namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi.Models
-{
-    using Microsoft.Rest;
-    using Microsoft.Rest.Serialization;
-    using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public partial class CustomerReviewDetailed
-    {
-        /// <summary>
-        /// Initializes a new instance of the CustomerReviewDetailed class.
-        /// </summary>
-        public CustomerReviewDetailed()
-        {
-            CustomInit();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CustomerReviewDetailed class.
-        /// </summary>
-        public CustomerReviewDetailed(string authorNickname = default(string), string content = default(string), bool? isActive = default(bool?), string productId = default(string), int? value = default(int?), int? likesNumber = default(int?), int? dislikesNumber = default(int?), IList<CustomerReviewAssessmentResponse> customerReviewAssessments = default(IList<CustomerReviewAssessmentResponse>), System.DateTime? createdDate = default(System.DateTime?), System.DateTime? modifiedDate = default(System.DateTime?), string createdBy = default(string), string modifiedBy = default(string), string id = default(string))
-        {
-            AuthorNickname = authorNickname;
-            Content = content;
-            IsActive = isActive;
-            ProductId = productId;
-            Value = value;
-            LikesNumber = likesNumber;
-            DislikesNumber = dislikesNumber;
-            CustomerReviewAssessments = customerReviewAssessments;
-            CreatedDate = createdDate;
-            ModifiedDate = modifiedDate;
-            CreatedBy = createdBy;
-            ModifiedBy = modifiedBy;
-            Id = id;
-            CustomInit();
-        }
-
-        /// <summary>
-        /// An initialization method that performs custom operations like setting defaults
-        /// </summary>
-        partial void CustomInit();
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "authorNickname")]
-        public string AuthorNickname { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "content")]
-        public string Content { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "isActive")]
-        public bool? IsActive { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "productId")]
-        public string ProductId { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "value")]
-        public int? Value { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "likesNumber")]
-        public int? LikesNumber { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "dislikesNumber")]
-        public int? DislikesNumber { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "customerReviewAssessments")]
-        public IList<CustomerReviewAssessmentResponse> CustomerReviewAssessments { get; set; }
 
         /// <summary>
         /// </summary>
@@ -2493,22 +2383,22 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi.
     using System.Threading;
     using System.Threading.Tasks;
 
-    public partial class GenericSearchResultCustomerReviewBrief
+    public partial class GenericSearchResultCustomerReviewDetailed
     {
         /// <summary>
         /// Initializes a new instance of the
-        /// GenericSearchResultCustomerReviewBrief class.
+        /// GenericSearchResultCustomerReviewDetailed class.
         /// </summary>
-        public GenericSearchResultCustomerReviewBrief()
+        public GenericSearchResultCustomerReviewDetailed()
         {
             CustomInit();
         }
 
         /// <summary>
         /// Initializes a new instance of the
-        /// GenericSearchResultCustomerReviewBrief class.
+        /// GenericSearchResultCustomerReviewDetailed class.
         /// </summary>
-        public GenericSearchResultCustomerReviewBrief(int? totalCount = default(int?), IList<CustomerReviewBrief> results = default(IList<CustomerReviewBrief>))
+        public GenericSearchResultCustomerReviewDetailed(int? totalCount = default(int?), IList<CustomerReviewDetailed> results = default(IList<CustomerReviewDetailed>))
         {
             TotalCount = totalCount;
             Results = results;
@@ -2528,7 +2418,7 @@ namespace VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi.
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "results")]
-        public IList<CustomerReviewBrief> Results { get; set; }
+        public IList<CustomerReviewDetailed> Results { get; set; }
 
     }
 }

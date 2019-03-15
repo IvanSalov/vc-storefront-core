@@ -14,6 +14,8 @@ namespace VirtoCommerce.Storefront.Model.CustomerReviews
         public int? LikesNumber { get; set; }
         public int? DislikesNumber { get; set; }
         public bool? IsCurrentUserReview { get; set; }
+        public bool? IsLikedByCurrentUser { get; set; }
+        public bool? IsDislikedByCurrentUser { get; set; }
 
 
         public DateTime? CreatedDate { get; set; }
