@@ -9,7 +9,7 @@ namespace VirtoCommerce.Storefront.Model.CustomerReviews
         Task<IPagedList<CustomerReview>> SearchReviewsAsync(CustomerReviewSearchCriteria criteria);
 
         double? GetProductRating(string productId);
-        Task<double?> GetProductratingAsync(string productId);
+        Task<double?> GetProductRatingAsync(string productId);
 
         void CreateReview(string productId, CustomerReviewCreateModel customerReviewCreateModel);
         Task CreateReviewAsync(string productId, CustomerReviewCreateModel customerReviewCreateModel);

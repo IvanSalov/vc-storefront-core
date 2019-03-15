@@ -8,6 +8,7 @@ using VirtoCommerce.Storefront.AutoRestClients.CustomerReviews.WebModuleApi.Mode
 using VirtoCommerce.Storefront.Domain.CustomerReview;
 using VirtoCommerce.Storefront.Extensions;
 using VirtoCommerce.Storefront.Infrastructure;
+using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Caching;
 using VirtoCommerce.Storefront.Model.Common.Caching;
 using VirtoCommerce.Storefront.Model.CustomerReviews;
@@ -20,12 +21,14 @@ namespace VirtoCommerce.Storefront.Domain
         private readonly IProductRatingOperations _productRatingOperations;
         private readonly IStorefrontMemoryCache _memoryCache;
         private readonly IApiChangesWatcher _apiChangesWatcher;
-        public CustomerReviewService(ICustomerReviews customerReviewsApi, IProductRatingOperations productRatingOperations, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher)
+        private readonly IWorkContextAccessor _workContextAccessor;
+        public CustomerReviewService(ICustomerReviews customerReviewsApi, IProductRatingOperations productRatingOperations, IStorefrontMemoryCache memoryCache, IApiChangesWatcher apiChangesWatcher, IWorkContextAccessor workContextAccessor)
         {
             _customerReviewsApi = customerReviewsApi;
             _productRatingOperations = productRatingOperations;
             _memoryCache = memoryCache;
             _apiChangesWatcher = apiChangesWatcher;
+            _workContextAccessor = workContextAccessor;
         }
 
         public IPagedList<Model.CustomerReviews.CustomerReview> SearchReviews(Model.CustomerReviews.CustomerReviewSearchCriteria criteria)
@@ -35,26 +38,28 @@ namespace VirtoCommerce.Storefront.Domain
 
         public async Task<IPagedList<Model.CustomerReviews.CustomerReview>> SearchReviewsAsync(Model.CustomerReviews.CustomerReviewSearchCriteria criteria)
         {
-            var cacheKey = CacheKey.With(GetType(),nameof(SearchReviewsAsync), criteria.GetCacheKey());
+            var cacheKey = CacheKey.With(GetType(), nameof(SearchReviewsAsync), criteria.GetCacheKey());
+            var user = _workContextAccessor.WorkContext.CurrentUser;
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CustomerReviewCacheRegion.CreateChangeToken());
                 cacheEntry.AddExpirationToken(_apiChangesWatcher.CreateChangeToken());
+                cacheEntry.AddExpirationToken(CustomerReviewCacheRegion.CreateCustomerCustomerReviewChangeToken(_workContextAccessor.WorkContext.CurrentUser.Id));
 
                 var result = await _customerReviewsApi.SearchCustomerReviewsAsync(criteria.ToSearchCriteriaDto());
-                return new StaticPagedList<Model.CustomerReviews.CustomerReview>(result.Results.Select(x => x.ToCustomerReview()),
+                return new StaticPagedList<Model.CustomerReviews.CustomerReview>(result.Results.Select(x => x.ToCustomerReview(user)),
                                                          criteria.PageNumber, criteria.PageSize, result.TotalCount.Value);
             });
         }
 
         public double? GetProductRating(string productId)
         {
-            return GetProductratingAsync(productId).GetAwaiter().GetResult();
+            return GetProductRatingAsync(productId).GetAwaiter().GetResult();
         }
 
-        public async Task<double?> GetProductratingAsync(string productId)
+        public async Task<double?> GetProductRatingAsync(string productId)
         {
-            var cacheKey = CacheKey.With(GetType(), nameof(GetProductratingAsync), productId);
+            var cacheKey = CacheKey.With(GetType(), nameof(GetProductRatingAsync), productId);
             return await _memoryCache.GetOrCreateExclusiveAsync(cacheKey, async (cacheEntry) =>
             {
                 cacheEntry.AddExpirationToken(CustomerReviewCacheRegion.CreateChangeToken());
@@ -72,9 +77,10 @@ namespace VirtoCommerce.Storefront.Domain
 
         public async Task CreateReviewAsync(string productId, CustomerReviewCreateModel customerReviewCreateModel)
         {
+            CustomerReviewCacheRegion.ExpireCustomerCustomerReview(_workContextAccessor.WorkContext.CurrentUser.Id);
             var model = customerReviewCreateModel.ToCustomerReviewRequest();
             model.ProductId = productId;
-            await _customerReviewsApi.UpdateWithHttpMessagesAsync(new List<CustomerReviewRequest> { model });
+            await _customerReviewsApi.UpdateAsync(new List<CustomerReviewRequest> { model });
         }
 
         public void UpdateReview(string productId, string customerReviewId, CustomerReviewUpdateModel customerReviewUpdateModel)
@@ -87,6 +93,7 @@ namespace VirtoCommerce.Storefront.Domain
             var model = customerReviewUpdateModel.ToCustomerReviewRequest();
             model.Id = customerReviewId;
             model.ProductId = productId;
+            CustomerReviewCacheRegion.ExpireCustomerCustomerReview(_workContextAccessor.WorkContext.CurrentUser.Id);
             await _customerReviewsApi.UpdateWithHttpMessagesAsync(new List<CustomerReviewRequest> { model });
         }
 
@@ -97,6 +104,7 @@ namespace VirtoCommerce.Storefront.Domain
 
         public async Task DeleteReviewAsync(string productId, string customerReviewId)
         {
+            CustomerReviewCacheRegion.ExpireCustomerCustomerReview(_workContextAccessor.WorkContext.CurrentUser.Id);
             await _customerReviewsApi.DeleteAsync(new List<string> { customerReviewId });
         }
 
@@ -108,7 +116,7 @@ namespace VirtoCommerce.Storefront.Domain
         public async Task CreateReviewAssessmentAsync(string productId, string customerReviewId, CustomerReviewAssessmentCreateModel customerReviewAssessmentCreateModel)
         {
             var model = customerReviewAssessmentCreateModel.ToCustomerReviewAssessmentRequest();
-
+            CustomerReviewCacheRegion.ExpireCustomerCustomerReview(_workContextAccessor.WorkContext.CurrentUser.Id);
             await _customerReviewsApi.AddAssessmentAsync(customerReviewId, model);
         }
     }

@@ -5,7 +5,7 @@ namespace VirtoCommerce.Storefront.Domain.CustomerReview
 {
     public static partial class CustomerReviewConverter
     {
-        public static Model.CustomerReviews.CustomerReview ToCustomerReview(this reviewDto.CustomerReviewBrief itemDto)
+        public static Model.CustomerReviews.CustomerReview ToCustomerReview(this reviewDto.CustomerReviewBrief itemDto, Model.Security.User user)
         {
             var result = new Model.CustomerReviews.CustomerReview
             {
@@ -20,7 +20,8 @@ namespace VirtoCommerce.Storefront.Domain.CustomerReview
                 ProductId = itemDto.ProductId,
                 Value = itemDto.Value,
                 LikesNumber = itemDto.LikesNumber,
-                DislikesNumber = itemDto.DislikesNumber
+                DislikesNumber = itemDto.DislikesNumber,
+                IsCurrentUserReview = user.UserName == itemDto.CreatedBy
             };
 
             return result;

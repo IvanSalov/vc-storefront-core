@@ -6,7 +6,6 @@ using VirtoCommerce.Storefront.Infrastructure;
 using VirtoCommerce.Storefront.Model;
 using VirtoCommerce.Storefront.Model.Catalog;
 using VirtoCommerce.Storefront.Model.Common;
-using VirtoCommerce.Storefront.Model.CustomerReviews;
 using VirtoCommerce.Storefront.Model.Services;
 
 namespace VirtoCommerce.Storefront.Controllers
@@ -77,29 +76,6 @@ namespace VirtoCommerce.Storefront.Controllers
         public ActionResult Compare()
         {
             return View("product-compare");
-        }
-
-        [HttpPost("product/{productId}/customerReviews")]
-        public ActionResult SaveCustomerReview(string productId, CustomerReviewCreateModel customerReviewCreateModel)
-        {
-        }
-
-        [HttpPut("product/{productId)/customerReviews/{customerReviewId}")]
-        public ActionResult EditCustomerReview(string productId, string customerReviewId, CustomerReviewUpdateModel customerReviewUpdateMoodel)
-        {
-
-        }
-
-        [HttpDelete("product/{productId)/customerReviews/{customerReviewId}")]
-        public ActionResult DeleteCustomerReview(string productId, string customerReviewId)
-        {
-
-        }
-
-        [HttpPost("product/{productId}/customerReviews/{customerReviewId}/assessments")]
-        public ActionResult SaveCustomerReviewAssessment(string productId, string customerReviewId, CustomerReviewAssessmentCreateModel customerReviewAssessmentCreateModel)
-        {
-
-        }
+        }        
     }
 }
